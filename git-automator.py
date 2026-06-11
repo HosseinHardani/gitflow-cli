@@ -32,7 +32,7 @@ def cmd_save(args):
     # Check for changes
     status, _, _ = run("git status --porcelain")
     if not status:
-        print("✅ Nothing to commit — working tree clean.")
+        print("Nothing to commit — working tree clean.")
         return
 
     msg = args.message or f"chore: auto-save {datetime.now().strftime('%Y-%m-%d %H:%M')}"
@@ -40,9 +40,9 @@ def cmd_save(args):
     run("git add -A", capture=False)
     out, err, code = run(f'git commit -m "{msg}"')
     if code == 0:
-        print(f"✅ Committed: {msg}")
+        print(f" Committed: {msg}")
     else:
-        print(f"❌ Commit failed:\n{err}")
+        print(f"Commit failed:\n{err}")
 
 
 def cmd_sync(args):
@@ -64,7 +64,7 @@ def cmd_sync(args):
         print(f"❌ Push failed:\n{err}")
         return
 
-    print("✅ Sync complete.")
+    print("Sync complete.")
 
 
 def cmd_feature(args):
@@ -83,9 +83,9 @@ def cmd_feature(args):
     _, err, code = run(f"git checkout -b {branch_name}")
 
     if code == 0:
-        print(f"✅ Created and switched to: {branch_name}")
+        print(f" Created and switched to: {branch_name}")
     else:
-        print(f"❌ Failed to create branch:\n{err}")
+        print(f" Failed to create branch:\n{err}")
 
 
 def cmd_undo(args):
@@ -96,10 +96,10 @@ def cmd_undo(args):
     out, err, code = run("git reset --soft HEAD~1")
 
     if code == 0:
-        print(f"✅ Undid last commit: \"{last_msg}\"")
+        print(f"Undid last commit: \"{last_msg}\"")
         print("   Changes are still staged.")
     else:
-        print(f"❌ Undo failed:\n{err}")
+        print(f" Undo failed:\n{err}")
 
 
 def cmd_cleanup(args):
@@ -114,10 +114,10 @@ def cmd_cleanup(args):
     to_delete = [b for b in branches if b and b not in protected and b != current]
 
     if not to_delete:
-        print("✅ No merged branches to clean up.")
+        print(" No merged branches to clean up.")
         return
 
-    print(f"🧹 Found {len(to_delete)} merged branch(es):")
+    print(f" Found {len(to_delete)} merged branch(es):")
     for b in to_delete:
         print(f"   - {b}")
 
@@ -129,7 +129,7 @@ def cmd_cleanup(args):
 
     for b in to_delete:
         _, _, code = run(f"git branch -d {b}")
-        status = "✅" if code == 0 else "❌"
+        status = "" if code == 0 else "❌"
         print(f"   {status} Deleted: {b}")
 
 
@@ -142,7 +142,7 @@ def cmd_status(args):
     behind, _, _ = run("git rev-list HEAD..@{u} --count")
     status, _, _ = run("git status --porcelain")
 
-    print(f"📍 Branch : {branch}")
+    print(f" Branch : {branch}")
     if ahead and ahead != "0":
         print(f"⬆️  Ahead  : {ahead} commit(s) to push")
     if behind and behind != "0":
@@ -153,12 +153,12 @@ def cmd_status(args):
         added    = [l for l in status.splitlines() if l.startswith("A") or l.startswith("??")]
         deleted  = [l for l in status.splitlines() if l.startswith("D") or l.startswith(" D")]
 
-        print(f"\n📂 Changes ({len(status.splitlines())} file(s)):")
-        for f in modified: print(f"   ✏️  {f[3:]}")
-        for f in added:    print(f"   ➕ {f[3:]}")
-        for f in deleted:  print(f"   🗑️  {f[3:]}")
+        print(f"\n Changes ({len(status.splitlines())} file(s)):")
+        for f in modified: print(f"    {f[3:]}")
+        for f in added:    print(f"   {f[3:]}")
+        for f in deleted:  print(f"    {f[3:]}")
     else:
-        print("✅ Working tree clean")
+        print(" Working tree clean")
 
 
 # ─── Entry Point ─────────────────────────────────────────────────────────────
